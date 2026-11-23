@@ -720,7 +720,11 @@ extern "C" int StateAction(StateMem *sm, int load, int data_only)
 #define MEDNAFEN_CORE_GEOMETRY_MAX_H (224 * 2)
 #define MEDNAFEN_CORE_GEOMETRY_ASPECT_RATIO (12.0 / 7.0)
 /* The widest 3D mode, so a mode chosen at run time fits. */
-#define FB_WIDTH MEDNAFEN_CORE_GEOMETRY_MAX_W
+/* Koriki: VIP output is written one column at a time, so every pixel of a
+ * column is a pitch apart. A 1024-pixel pitch made that copy ~40% slower on
+ * the Cortex-A7 (cache/TLB aliasing); 32 pixels of padding avoid it while
+ * keeping room for the side-by-side mode. */
+#define FB_WIDTH (MEDNAFEN_CORE_GEOMETRY_MAX_W + 32)
 #define FB_HEIGHT 224 * 2
 
 

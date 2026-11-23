@@ -936,6 +936,12 @@ static void CopyFBColumnToTarget_Anaglyph(void)
 {
    const int lr = (DisplayRegion & 2) >> 1;
 
+   /* Koriki: the right eye is ORed onto the left one; when its colour is
+    * black (e.g. "black & red" without an anaglyph preset) it adds nothing,
+    * so skip the read-modify-write of the whole column. */
+   if(lr && !(BrightCLUT[1][1] | BrightCLUT[1][2] | BrightCLUT[1][3]))
+      return;
+
    if(!lr)
       CopyFBColumnToTarget_Anaglyph_BASE(DisplayActive, 0);
    else

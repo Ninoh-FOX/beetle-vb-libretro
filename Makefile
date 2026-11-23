@@ -30,6 +30,18 @@ else ifneq (,$(findstring rpi,$(platform)))
 endif
 
 NEED_BPP = 32
+
+# Koriki (Miyoo Mini / Mini Plus, Cortex-A7): RGB565 output is cheaper to
+# produce and to hand over to the frontend.
+ifeq ($(platform), miyoomini)
+   override platform := unix
+   NEED_BPP = 16
+   CROSS_COMPILE ?= /opt/miyoomini-toolchain/usr/bin/arm-linux-gnueabihf-
+   CC  = $(CROSS_COMPILE)gcc
+   CXX = $(CROSS_COMPILE)g++
+   AR  = $(CROSS_COMPILE)ar
+endif
+
 NEED_BLIP = 1
 HAVE_GLES ?= 0
 HAVE_OPENGL ?= 0
